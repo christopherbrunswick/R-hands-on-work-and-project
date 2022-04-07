@@ -1,0 +1,181 @@
+---
+title: "R Programming Project"
+author: "Christopher Brunswick"
+date: "12/8/2021"
+output: word_document
+---
+
+```{r}
+#install.packages("tidyverse")
+library(readxl)
+#library(dplyr)
+library(ggplot2)
+filepth <- "D:/Rprogrammingproject/mouse_brain.xlsx"
+dat <- read_xlsx(filepth)
+options(max.print=1000000)
+
+S_1injuredbrainchars <- dat$...10
+numberobj1 <- S_1injuredbrainchars[2:301]
+s_1injuredbrainnumbs <- as.numeric(numberobj1)
+
+
+S_2injuredbrainchars <- dat$...11
+numberobj2 <- S_2injuredbrainchars[2:301]
+S_2injuredbrainnumbs <- as.numeric(numberobj2)
+
+s_3injuredbrainchars <- dat$...12
+numberobj3 <- s_3injuredbrainchars[2:301]
+s_3injuredbrainnumbs <- as.numeric(numberobj3)
+
+s_4injuredbrainchars <- dat$...13
+numberobj4 <- s_4injuredbrainchars[2:301]
+s_4injuredbrainnumbs <- as.numeric(numberobj4)
+
+s_5normalbrainchars <- dat$...14
+numberobj5 <- s_5normalbrainchars[2:301]
+s_5normalbrainnumbs <- as.numeric(numberobj5)
+
+s_6normalbrainchars <- dat$...15
+numberobj6 <- s_6normalbrainchars[2:301]
+s_6normalbrainnumbs <- as.numeric(numberobj6)
+
+s_7normalbrainchars <- dat$...16
+numberobj7 <- s_7normalbrainchars[2:301]
+s_7normalbrainnumbs <- as.numeric(numberobj7)
+```
+
+# 1) Compute the mean value of protein expression for the mice with 
+# injured brain and normal control mice, respectively, for each protein.
+
+
+```{r}
+meanofrow_ingroup1 <- function(){
+  m1 <- 300
+  for(x1 in 1:m1){
+  rowmean_group1 <- c(s_1injuredbrainnumbs[x1],
+S_2injuredbrainnumbs[x1],s_3injuredbrainnumbs[x1],s_4injuredbrainnumbs[x1])
+  row_added1 <- sum(rowmean_group1)
+  average1 <- row_added1/4
+  print(average1)
+  }
+}
+meanofrow_ingroup1()
+
+meanofrow_ingroup2 <- function(){
+  m2 <- 300
+  for(x2 in 1:m2){
+    rowmean_group2 <- c(s_5normalbrainnumbs[x2],s_6normalbrainnumbs[x2],
+                    s_7normalbrainnumbs[x2])
+    row_added2 <- sum(rowmean_group2)
+    average2 <- row_added2/3
+    print(average2)
+  }
+}
+meanofrow_ingroup2()
+```
+
+# 2) Compute the standard deviation of protein expression for the mice
+# with injured brain and normal control mice, respectively, for each
+# protein
+
+```{r}
+sdofrow_ingroup1 <- function(){
+  m1 <- 300
+  for(x1 in 1:m1){
+    rowmean_group1 <- c(s_1injuredbrainnumbs[x1],
+S_2injuredbrainnumbs[x1],s_3injuredbrainnumbs[x1],s_4injuredbrainnumbs[x1])
+    row_added1 <- sum(rowmean_group1)
+    average1 <- row_added1/4
+    rowdiff_group1 <- c(s_1injuredbrainnumbs[x1]-average1,
+S_2injuredbrainnumbs[x1]-average1,s_3injuredbrainnumbs[x1]-average1,
+s_4injuredbrainnumbs[x1]-average1)
+    squareddiff1 <- rowdiff_group1^2
+    sumofsquareddiff1 <- sum(squareddiff1)
+    standarddev1 <- sumofsquareddiff1/3
+    print(standarddev1)
+  }
+}
+sdofrow_ingroup1()
+
+sdofrow_ingroup2 <- function(){
+  m2 <- 300
+  for(x2 in 1:m2){
+    rowmean_group2 <- c(s_5normalbrainnumbs[x2],s_6normalbrainnumbs[x2],
+                        s_7normalbrainnumbs[x2])
+    row_added2 <- sum(rowmean_group2)
+    average2 <- row_added2/3
+    rowdiff_group2 <- c(s_5normalbrainnumbs[x2]-average2,
+                        s_6normalbrainnumbs[x2]-average2,
+                        s_7normalbrainnumbs[x2]-average2)
+                        
+    squareddiff2 <- rowdiff_group2^2
+    sumofsquareddiff2 <- sum(squareddiff2)
+    standarddev2 <- sumofsquareddiff2/2
+    print(standarddev2)
+  }
+}
+sdofrow_ingroup2()
+```
+
+# 3) Perform a two-sample t-test to compare the mean protein
+# expression in the mice with injured brain and normal brain control
+# mice for each protein
+
+```{r}
+two_sample <- function(t){
+test <- t.test(c(s_1injuredbrainnumbs[t],
+           S_2injuredbrainnumbs[t],s_3injuredbrainnumbs[t],
+           s_4injuredbrainnumbs[t]), c(s_5normalbrainnumbs[t],
+                                         s_6normalbrainnumbs[t],
+                                        s_7normalbrainnumbs[t]))
+
+print(test)
+}
+
+value <- 1:300
+for(i in value){
+  t_test <- two_sample(i)
+  }
+```
+
+# 4) Sort the protein according to the p-value from the t-tests
+# in ascending order. Report the protein with significant mean
+# expression between the mice with injured brain and the normal 
+# control mice with p-value < 0.05 and p-value < 0.01, respectively.
+
+```{r}
+value <- 1:300
+for(i in value){
+  p_value <- two_sample(i)$p.value
+  sorting_pval <- sort(p_value)
+  if(sorting_pval < 0.05){
+  print(sorting_pval)
+  }
+}
+
+value2 <- 1:300
+for(i in value2){
+  p_value2 <- two_sample(i)$p.value
+  sorting_pval2 <- sort(p_value2)
+  if(sorting_pval2 < 0.01){
+    print(sorting_pval2)
+  }
+}
+```
+
+# 5) Extract the t value from the t-test and generate a plot of p-value
+# vs. t value. Please put p-value as the y-axis and t value as the x-axis.
+
+```{r}
+#dev.off()
+plot(x=NA,y=NA, xlim=c(-20,25), ylim=c(0,2),xlab="t-value",ylab="p-value")
+legend("topright",c("tvalue","pvalue"), pch=c(5,0))
+#par(mar=c(1,1,1,1))
+numb <- 1:300
+for(point in numb){
+  tpoint <- two_sample(point)$statistic
+  ppoint <- two_sample(point)$p.value
+  points(x=tpoint, y=ppoint, pch=c(5,0))
+}
+```
+

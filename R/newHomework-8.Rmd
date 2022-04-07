@@ -1,0 +1,118 @@
+---
+title: "Homework 8"
+author: "Christopher Brunswick"
+date: "11/16/2021"
+output: word_document
+---
+# 1. What will this conditional expression return?
+```{r}
+library(dslabs)
+data(murders)
+x <- c(1,2,-3,4)
+if(all(x>0)){
+  print("All Postives")
+} else{
+  print("Not all positives")
+}
+```
+
+# 2. Which of the following expressions is always FALSE when at 
+# least one entry of a logical vector x is TRUE?
+
+```{r}
+any(!x)
+```
+
+# 3. The function nchar tells you how many characters 
+# long a character vector is. 
+# Write a line of code that assigns to the object new_names the 
+# state abbreviation when the state name is longer than 8 characters.
+
+
+```{r}
+state_name <- murders$state
+length_of_name <- nchar(state_name) > 8
+murders$abb[length_of_name]
+new_names <- murders$abb[length_of_name]
+```
+
+# 4. Create a function sum_n that for any given value, say n, computes 
+# the sum of the integers from 1 to n (inclusive). 
+# Use the function to determine the sum of integers from 1 to 5,000.
+
+```{r}
+sum_n <- function(n){ 
+  x <- 1:n  
+  print(sum(x))
+  }
+sum_n(5000)
+```
+
+
+# 5. Create a function altman_plot that takes 
+# two arguments, x and y, and plots the difference against the sum.
+
+```{r}
+altman_plot <- function(x,y){
+  print(plot(x-y,x+y))
+}
+altman_plot(10,100)
+```
+
+# 6. After running the code below, what is the value of x?
+
+```{r}
+x <- 3
+my_func <- function(y){
+  x <- 5
+  y+5
+}
+my_func(x)
+```
+
+# 7. Write a function compute_s_n that for any given n computes 
+# the sum Sn=12+22+32+…n2. Report the value of the sum when n=10.
+
+```{r}
+compute_s_n <- function(n){
+  x <- 1:n
+  q <- x^2
+  sum(q)
+}
+compute_s_n(10)
+```
+
+# 8. Define an empty numerical vector s_n of size 25 
+# using s_n <- vector("numeric", 25) and store in the results 
+# of S1,S2,…S25 using a for-loop.
+
+```{r}
+m <- 25
+s_n <- vector( length = m)
+for (n in 1:m){
+  s_n[n] <- compute_s_n(n)
+}
+s_n
+```
+
+# 9. Repeat exercise 8, but this time use sapply.
+
+```{r}
+n <- 1:25
+sapply(n , compute_s_n)
+```
+
+# 10. Plot Sn versus n. Use points defined by n=1,…,25.
+
+```{r}
+plot(n,s_n)
+```
+
+
+# 11. Confirm that the formula for this sum is Sn=n(n+1)(2n+1)/6.
+
+```{r}
+t <- 1:25
+q <- (t*(t+1)*(2*t+1))/6
+q
+```

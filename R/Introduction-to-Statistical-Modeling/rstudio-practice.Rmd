@@ -1,0 +1,47 @@
+---
+title: "R-Programming Practice"
+author: "Christopher Brunswick"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+
+values <- c(1,2,3,4)
+animals <- c('Cat', 'Bird', 'Fish', 'Dog')
+names(values) <- c('animal_1', 'animal_2', 'animal_3', 'animal_4')
+values
+```
+
+-   **Factors**
+
+    Lets say you have a categorical variable, and label them in the following way:
+
+```{r}
+groups <- c(1,1,1,1,2,2,2,3,3,3)
+```
+
+and you have scores for those groups on a math test
+
+```{r}
+scores <- c(91,87,78,96,68,100,99,88,71,77)
+```
+
+putting them together
+
+```{r}
+df <- data.frame(groups, scores)
+df
+```
+
+```{r}
+df$groups <- as.factor(df$groups)
+df
+#changes groups from dbl to fctr so that we can not return values when running operations on groups
+#the values of groups are now categorical variables to scores
+```
+
+```{r}
+levels(df$groups) <- c('Math', 'Computer Science', 'Engineering', 'Integrated Technology')
+df
+```
